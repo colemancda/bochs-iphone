@@ -8,14 +8,13 @@
 
 #import "OSPickerViewController.h"
 
-#if 0
-#define ROOT_OS_PATH @"/Users/<username>/tmp/Bochs/"
-#else
-#define ROOT_OS_PATH @"/var/mobile/Library/Bochs/"
-#endif
+@interface OSPickerViewController ()
+
+@property (readonly) NSString *documentsPath;
+
+@end
 
 @implementation OSPickerViewController
-
 
 - (id)init
 {
@@ -23,7 +22,7 @@
 	{
 		delegate = nil;
 		
-		NSArray* filesArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:ROOT_OS_PATH error:nil];
+		NSArray* filesArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.documentsPath error:nil];
 		
 		osArray = [[NSMutableArray alloc] initWithCapacity:[filesArray count]];
 
@@ -92,13 +91,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	[delegate selectedOsInPickerView:self withConfigFile:[NSString stringWithFormat:@"%@/%@/os.ini", ROOT_OS_PATH, [osArray objectAtIndex:[indexPath row]]]];
+	[delegate selectedOsInPickerView:self withConfigFile:[NSString stringWithFormat:@"%@/%@/os.ini", self.documentsPath, [osArray objectAtIndex:[indexPath row]]]];
 }
 
-- (void)dealloc 
+-(NSString *)documentsPath
 {
-	[osArray release];
-	[super dealloc];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return basePath;
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "bochsAppDelegate.h"
+@class RenderView;
 
 @implementation bochsAppDelegate
 
@@ -25,7 +26,7 @@ int bochs_main (const char*);
 
 - (void)refreshThread
 {
-	NSTimer* t = [NSTimer timerWithTimeInterval:0.1f target:[NSClassFromString(@"RenderView") sharedInstance] selector:@selector(doRedraw) userInfo:nil repeats:YES];
+    NSTimer* t = [NSTimer timerWithTimeInterval:0.1f target:[RenderView sharedInstance] selector:@selector(doRedraw) userInfo:nil repeats:YES];
 	[[NSRunLoop currentRunLoop] addTimer:t forMode:NSRunLoopCommonModes];
 	
 	[[NSRunLoop currentRunLoop] run];
