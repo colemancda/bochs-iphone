@@ -273,53 +273,52 @@ void addToEventBuffer(int isMouse, int x, int y, int button)
 {
 	@synchronized(self)
 	{
-		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		@autoreleasepool {
 		
-		if (!isTextMode)
-		{
-			CGContextRef c = UIGraphicsGetCurrentContext();
-			CGContextSaveGState(c);
-			
-			CGContextTranslateCTM(c, 0.0f, 320.0f);
-			
-			CGContextScaleCTM(c, 480.0f/currentResX, -320.0f/currentResY);
-			
-			CGImageRef image = CGBitmapContextCreateImage(imageContext);
-			if (image)
+			if (!isTextMode)
 			{
-				CGContextDrawImage(c, CGRectMake(0, 0, currentResX,  currentResY), image);
-				CGImageRelease(image);
-			}
-					
-			CGContextRestoreGState(c);
-			
-		}else
-		{
-			CGContextRef c = UIGraphicsGetCurrentContext();
-			CGContextSaveGState(c);
-			
-			CGContextScaleCTM(c, 480.0f/currentResX, 320.0f/currentResY);
-			
-			UIFont* font = [UIFont fontWithName:@"Courier" size:15];
-			
-			[[UIColor whiteColor] set];
-			
-			for (int y = 0; y < 25; y++)
-			{
-				for (int x = 0; x < 80; x++)
+				CGContextRef c = UIGraphicsGetCurrentContext();
+				CGContextSaveGState(c);
+				
+				CGContextTranslateCTM(c, 0.0f, 320.0f);
+				
+				CGContextScaleCTM(c, 480.0f/currentResX, -320.0f/currentResY);
+				
+				CGImageRef image = CGBitmapContextCreateImage(imageContext);
+				if (image)
 				{
-					unichar ch = textBuffer[x + y*80] & 0xff;
-					
-					NSString * s = [[NSString alloc] initWithCharacters:&ch length:1];
-					[s drawAtPoint:CGPointMake(x * 8, 20 + y * 16) withFont:font];
-					[s release];
+					CGContextDrawImage(c, CGRectMake(0, 0, currentResX,  currentResY), image);
+					CGImageRelease(image);
 				}
+						
+				CGContextRestoreGState(c);
+				
+			}else
+			{
+				CGContextRef c = UIGraphicsGetCurrentContext();
+				CGContextSaveGState(c);
+				
+				CGContextScaleCTM(c, 480.0f/currentResX, 320.0f/currentResY);
+				
+				UIFont* font = [UIFont fontWithName:@"Courier" size:15];
+				
+				[[UIColor whiteColor] set];
+				
+				for (int y = 0; y < 25; y++)
+				{
+					for (int x = 0; x < 80; x++)
+					{
+						unichar ch = textBuffer[x + y*80] & 0xff;
+						
+						NSString * s = [[NSString alloc] initWithCharacters:&ch length:1];
+						[s drawAtPoint:CGPointMake(x * 8, 20 + y * 16) withFont:font];
+					}
+				}
+				
+				CGContextRestoreGState(c);
 			}
-			
-			CGContextRestoreGState(c);
-		}
 		
-		[pool release];
+		}
 	}
 }
 
