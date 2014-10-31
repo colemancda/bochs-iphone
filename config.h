@@ -663,7 +663,7 @@ typedef
 #define BX_SUPPORT_CLGD54XX 0
 
 // ACPI controller
-#define BX_SUPPORT_ACPI 0
+#define BX_SUPPORT_ACPI 1
 
 #if (BX_SUPPORT_ACPI && !BX_SUPPORT_PCI)
   #error To enable ACPI support, you must also enable PCI

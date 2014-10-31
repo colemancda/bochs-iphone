@@ -43,8 +43,11 @@ int bochs_main (const char*);
     configString = [configString stringByReplacingOccurrencesOfString:@"~/documents" withString:basePath options:NSCaseInsensitiveSearch range:NSMakeRange(0, configString.length)];
     
     // add bios paths
-    NSString *biosPath = [[NSBundle mainBundle] pathForResource:@"BIOS-bochs-lat­est" ofType:nil];
-    NSString *vgaBiosPath = [[NSBundle mainBundle] pathForResource:@"VGABIOS-lgpl-l­atest" ofType:nil];
+    NSString *biosPath = [[NSBundle mainBundle] pathForResource:@"bios" ofType:nil];
+    
+    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:biosPath], @"Bios file doesnt exists");
+    
+    NSString *vgaBiosPath = [[NSBundle mainBundle] pathForResource:@"vgabios" ofType:nil];
     configString = [configString stringByAppendingFormat:@"\nromimage: file=\"%@\", address=0x00000 \nvgaromimage: file=\"%@\"", biosPath, vgaBiosPath];
     
     // write to temp location
