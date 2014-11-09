@@ -746,3 +746,10 @@ int CDECL main(int argc, char *argv[])
   // even though we leave via 'myexit' just above
   return 0;
 }
+
+#pragma mark - BochsKit Extensions
+
+int BXImageMain(int argc, char *argv[])
+{
+    return main(argc, argv);
+}

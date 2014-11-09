@@ -38,6 +38,7 @@
 #include "iodev.h"
 
 #import <UIKit/UIKit.h>
+#import <BochsKit/BXRenderView.h>
 
 class bx_nogui_gui_c : public bx_gui_c 
 {
@@ -64,26 +65,6 @@ IMPLEMENT_GUI_PLUGIN_CODE(nogui)
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-@interface RenderView : UIView
-{
-	CGSize sz;
-	int* imageData;
-	CGContextRef imageContext;
-}
-
-+ (id)sharedInstance;
-
-- (void)addToWindow:(UIWindow*)window;
-
-- (int*)imageData;
-- (CGContextRef)imageContext;
-- (void)recreateImageContextWithX:(int)x y:(int)y bpp:(int)bpp;
-
-@end
-
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-
 typedef struct _EventStruct
 {
 	int isMouse;
@@ -92,7 +73,7 @@ typedef struct _EventStruct
 	int button;
 } EventStruct;
 
-static RenderView* renderView;
+static BXRenderView* renderView;
 static int tsx, tsy;
 static bool isTextMode;
 static unsigned short textBuffer[80*26];
@@ -107,7 +88,7 @@ static int touchCount;
 /////////////////////////////////////////////////////////////////////////////
 
 
-@implementation RenderView
+@implementation BXRenderView
 
 + (id)sharedInstance
 {
@@ -116,9 +97,6 @@ static int touchCount;
 
 - (id)init:(UIWindow*)window
 {
-	[[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
-	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
-	
 	self = [super initWithFrame:CGRectMake(0, 0, 480, 320)];
 	self.transform = CGAffineTransformMakeRotation(3.1415926/2);
 	self.transform = CGAffineTransformTranslate(self.transform, 80, 80);
