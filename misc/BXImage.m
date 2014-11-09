@@ -28,6 +28,8 @@
 #define HDIMAGE_HEADERS_ONLY 1
 #include "../iodev/hdimage.h"
 
+#import "BXImage.h"
+
 int bx_hdimage;
 int bx_fdsize_idx;
 int bx_hdsize;
@@ -605,7 +607,7 @@ int parse_cmdline(int argc, char *argv[])
   return ret;
 }
 
-int CDECL main(int argc, char *argv[])
+int CDECL bximage_main(int argc, char *argv[])
 {
   Bit64s sectors = 0;
   char filename[256];
@@ -747,9 +749,32 @@ int CDECL main(int argc, char *argv[])
   return 0;
 }
 
-#pragma mark - BochsKit Extensions
+#pragma mark - BochsKit
 
-int BXImageMain(int argc, char *argv[])
+@implementation BXImage
+
++(void)createImageWithURL:(NSURL *)url sizeInMB:(NSUInteger)sizeInMB completion:(void (^)(BOOL success))completion
 {
-    return main(argc, argv);
+    // execute on background operation queue
+    [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+     
+     // number of arguments
+     int argc = 5;
+     
+     char *argv[] = {(char *)"-q", (char *)"-hd", (char *)"-mode=flat", (char *)url.path.UTF8String, (char *)[NSString stringWithFormat:@"-size=%ld", (unsigned long)sizeInMB].UTF8String};
+     
+     int exitCode = bximage_main(argc, argv);
+     
+     completion(!exitCode);
+     
+     }];
 }
+
++(NSUInteger)numberOfCylindersForImageWithSizeInMB:(NSUInteger)sizeInMB
+{
+    return ((int)sizeInMB) * 1024.0 * 1024.0 / 16.0 / 63.0 / 512.0;
+}
+
+@end
+
+
