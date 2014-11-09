@@ -895,8 +895,6 @@ int bximage_main(int argc, char *argv[])
     // execute on background operation queue
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
         
-        // TODO: should check if file already exists there...
-        
         // number of arguments
         int argc = 5;
         
