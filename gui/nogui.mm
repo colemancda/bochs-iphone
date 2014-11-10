@@ -90,9 +90,33 @@ static int touchCount;
 
 @implementation BXRenderView
 
-+ (id)sharedInstance
++ (instancetype)sharedInstance
 {
-	return renderView;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        renderView = [[self alloc] init];
+    });
+    
+    return renderView;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        
+        imageData = nil;
+        imageContext = nil;
+        
+        self.backgroundColor = [UIColor blackColor];
+        
+        isTextMode = YES;
+        
+        [self recreateImageContextWithX:800 y:600 bpp:16];
+        
+    }
+    return self;
 }
 
 - (id)init:(UIWindow*)window
