@@ -26,7 +26,7 @@ int bochs_main (const char*);
 
 - (void)refreshThread
 {
-    NSTimer* t = [NSTimer timerWithTimeInterval:0.1f target:[NSClassFromString(@"RenderView") performSelector:@selector(sharedInstance)] selector:@selector(doRedraw) userInfo:nil repeats:YES];
+    NSTimer* t = [NSTimer timerWithTimeInterval:0.1f target:[NSClassFromString(@"BXRenderView") performSelector:@selector(sharedInstance)] selector:@selector(doRedraw) userInfo:nil repeats:YES];
 	[[NSRunLoop currentRunLoop] addTimer:t forMode:NSRunLoopCommonModes];
 	
 	[[NSRunLoop currentRunLoop] run];
@@ -57,7 +57,7 @@ int bochs_main (const char*);
     
     NSAssert(success, @"Could not write config file fo disk");
     
-	[[NSClassFromString(@"RenderView") alloc] performSelector:@selector(init:) withObject:window];
+	[[NSClassFromString(@"BXRenderView") alloc] performSelector:@selector(init:) withObject:window];
 	[NSThread detachNewThreadSelector:@selector(refreshThread) toTarget:self withObject:nil];
 	[NSThread detachNewThreadSelector:@selector(doBochs:) toTarget:self withObject:tempPath];
 	
